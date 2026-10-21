@@ -1,0 +1,20 @@
+
+.aider*
+.env
+
+# Entorno virtual de Python
+venv/
+env/
+ENV/
+
+# Variables de entorno
+.env
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de Excel o temporales que lea tu app (opcional, si no quieres que se suban datos de prueba)
+*.xlsx
+*.xls
