@@ -14,9 +14,9 @@ class Config():
     sybase_password_academico = os.getenv("SYBASE_PASSWORD_ACADEMICO")
     sybase_dsn_academico = os.getenv("SYBASE_DSN_ACADEMICO")
 
-    secret_key = os.getenv("SECRET_KEY")
-    algorithm = os.getenv("ALGORITHM")
-    access_token_expire_minutes = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 CORS_ORIGIN = [
     "http://localhost:5173",   # Frontend local (Vite)

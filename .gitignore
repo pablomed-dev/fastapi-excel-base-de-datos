@@ -1,6 +1,5 @@
 
 .aider*
-.env
 
 # Entorno virtual de Python
 venv/
