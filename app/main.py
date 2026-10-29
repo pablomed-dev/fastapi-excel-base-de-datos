@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.src.routers import academico
+from app.src.routers import academico, auth
 from app.src.middlewares import setup_middlewares
 
 app = FastAPI(title="Api Gestión")
@@ -8,6 +8,7 @@ app = FastAPI(title="Api Gestión")
 setup_middlewares(app)
 
 # Incluir los routers
+app.include_router(auth.router)
 app.include_router(academico.router)
 
 #ruta a la raíz---------------------------------------------------------------------------------------------------------------------------------------------------------------

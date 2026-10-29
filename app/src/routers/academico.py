@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from app.src.seguridad import obtener_usuario_actual
 from app.src.config import configuraciones
 from app.src.conexion import DbConexion
 from app.src.servicios.servicio_procesar_excel_dnerhs import servicio_procesar_excel_dnerhs
@@ -10,7 +11,7 @@ router = APIRouter(
 
 #------------------------------------------------------------------------------------------------------------------------
 @router.get("/prueba_conexion")
-async def prueba(): 
+async def prueba(usuario_actual: str = Depends(obtener_usuario_actual)): 
     conexion_sybase = DbConexion(configuraciones)
     conexion = conexion_sybase.conectar_bd_academico()
 

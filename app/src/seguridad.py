@@ -2,11 +2,11 @@ import jwt
 import bcrypt
 from datetime import datetime, timedelta, timezone
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2AuthorizationCodeBearer
+from fastapi.security import OAuth2PasswordBearer
 from app.src.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 #Indica a FastApi que el token se obtiene en la ruta /auth/login
-oauth2_scheme = OAuth2AuthorizationCodeBearer(tokenUrl= "auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl= "/auth/login")
 
 # --- 1. GESTIÓN DE CONTRASEÑAS (BCRYPT) ---
 def hashear_password(password: str) -> str:
