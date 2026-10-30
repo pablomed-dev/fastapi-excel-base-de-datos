@@ -1,5 +1,5 @@
 import jwt
-import bcrypt
+#import bcrypt
 from datetime import datetime, timedelta, timezone
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -9,17 +9,17 @@ from app.src.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl= "/auth/login")
 
 # --- 1. GESTIÓN DE CONTRASEÑAS (BCRYPT) ---
-def hashear_password(password: str) -> str:
-    """Convierte texto plano en un hash seguro para guardar en la BD."""
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(password.encode("utf-8"),salt).decode("utf-8")
+# def hashear_password(password: str) -> str:
+#     """Convierte texto plano en un hash seguro para guardar en la BD."""
+#     salt = bcrypt.gensalt()
+#     return bcrypt.hashpw(password.encode("utf-8"),salt).decode("utf-8")
 
-def verificar_password(password_plano: str, password_hasheado: str) -> bool:
-    """Compara si la contraseña enviada coincide con el hash guardado"""
-    return bcrypt.checkpw(
-        password_plano.encode("utf-8"),
-        password_hasheado.encode("utf-8")
-    )
+# def verificar_password(password_plano: str, password_hasheado: str) -> bool:
+#     """Compara si la contraseña enviada coincide con el hash guardado"""
+#     return bcrypt.checkpw(
+#         password_plano.encode("utf-8"),
+#         password_hasheado.encode("utf-8")
+#     )
 
 # --- 2. GESTIÓN DE TOCKENS JWT ---
 def crear_token_acceso(datos: dict) -> str:

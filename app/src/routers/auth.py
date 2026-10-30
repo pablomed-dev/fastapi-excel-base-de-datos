@@ -1,19 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from app.src.seguridad import verificar_password, hashear_password, crear_token_acceso
+from app.src.config import configuraciones
+from app.src.conexion import DbConexion
+from app.src.seguridad import crear_token_acceso
 
 router = APIRouter(
     prefix="/auth",
     tags=["Autenticación"]
 )
-
-# NOTA: Aquí deberías consultar a tu repositorio/base de datos Sybase
-# Este es un usuario de ejemplo para que puedas probar inmediatamente:
-USUARIO_DE_PRUEBA = {
-    "usuario": "admin",
-    # Este hash corresponde a la contraseña: "password123"
-    "password_hash": hashear_password("admin123")
-}
 
 @router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -22,21 +16,23 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     Recibe 'username' y 'password' (form-data).
     """
 
-    # 1. Validar que el usuario exista (aquí llamarías a tu bd)
-    if form_data.username != USUARIO_DE_PRUEBA["usuario"]:
+    gestor_conexion = DbConexion(configuraciones)
+
+    # 1. Intentamos conectar a la bd con las credenciales ingresadas
+    es_valido = gestor_conexion.autenticar_usuario_bd(
+        usuario = form_data.username,
+        password = form_data.password
+    )
+    
+    # 2. Si falló la conexión por usuario/password incorrectos
+    if not es_valido:
         raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
-            detail="Usuario o contraseña incorrectos"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Usuario o contraseña incorrecto",
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # 2. Validar que la contraseña coincida
-    if not verificar_password(form_data.password, USUARIO_DE_PRUEBA["password_hash"]):
-        raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
-            detail="Usuario o contraseña incorrectos"
-        )
-
-    # 3. Crear y retornar el token JWT
+    # 3. Si tuvo éxito, generamos el jwt con el usuario de Sybase en 'sub'
     token_jwt = crear_token_acceso(datos={"sub": form_data.username})
 
     return {
